@@ -55,6 +55,7 @@ export function isShallowInlineHTMLElement(element: HTMLElement): boolean {
   }
 
   const isInlineDisplay = ["inline", "contents"].some(display => computedStyle.display.includes(display))
+    || computedStyle.display.startsWith("ruby")
 
   return isInlineDisplay
 }
@@ -82,6 +83,7 @@ export function isShallowBlockHTMLElement(element: HTMLElement): boolean {
   }
 
   const isInlineDisplay = ["inline", "contents"].some(display => computedStyle.display.includes(display))
+    || computedStyle.display.startsWith("ruby")
 
   return !isInlineDisplay
 }

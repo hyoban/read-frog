@@ -97,6 +97,9 @@ export const FORCE_INLINE_TRANSLATION_TAGS = new Set([
   "SELECT",
   "OPTION",
   "SPAN",
+  "RUBY",
+  "RT",
+  "RP",
 ])
 
 export const MAIN_CONTENT_IGNORE_TAGS = new Set(["HEADER", "FOOTER", "NAV", "NOSCRIPT"])

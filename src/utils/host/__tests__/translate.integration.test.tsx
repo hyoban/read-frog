@@ -988,6 +988,58 @@ describe("translate", () => {
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
       })
     })
+    describe("force inline tags inside paragraphs", () => {
+      it("bilingual mode: should not split paragraph when inline tag has only decorative block child", async () => {
+        render(
+          <p data-testid="test-node">
+            {MOCK_ORIGINAL_TEXT}
+            <a style={{ display: "inline-flex" }}>
+              <span style={{ display: "block" }}></span>
+              {MOCK_ORIGINAL_TEXT}
+            </a>
+            {MOCK_ORIGINAL_TEXT}
+          </p>,
+        )
+        const node = screen.getByTestId("test-node")
+        await removeOrShowPageTranslation("bilingual", true)
+
+        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        const wrapper = expectTranslationWrapper(node, "bilingual")
+        expect(wrapper).toBe(node.lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+        expect(node.querySelectorAll(`.${CONTENT_WRAPPER_CLASS}`).length).toBe(1)
+
+        await removeOrShowPageTranslation("bilingual", true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
+      })
+      it("bilingual mode: should not split paragraph when ruby annotations are present", async () => {
+        render(
+          <p data-testid="test-node">
+            {MOCK_ORIGINAL_TEXT}
+            <ruby>
+              {MOCK_ORIGINAL_TEXT}
+              <rp>(</rp>
+              <rt>{MOCK_ORIGINAL_TEXT}</rt>
+              <rp>)</rp>
+            </ruby>
+            {MOCK_ORIGINAL_TEXT}
+          </p>,
+        )
+        const node = screen.getByTestId("test-node")
+        await removeOrShowPageTranslation("bilingual", true)
+
+        expectNodeLabels(node, [BLOCK_ATTRIBUTE, PARAGRAPH_ATTRIBUTE])
+        const wrapper = expectTranslationWrapper(node, "bilingual")
+        expect(wrapper).toBe(node.lastChild)
+        expectTranslatedContent(wrapper, BLOCK_CONTENT_CLASS)
+        expect(node.querySelectorAll(`.${CONTENT_WRAPPER_CLASS}`).length).toBe(1)
+
+        await removeOrShowPageTranslation("bilingual", true)
+        expect(node.querySelector(`.${CONTENT_WRAPPER_CLASS}`)).toBeFalsy()
+        expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}(${MOCK_ORIGINAL_TEXT})${MOCK_ORIGINAL_TEXT}`)
+      })
+    })
   })
   describe("don't walk into siblings (SVG, style, etc.)", () => {
     // https://github.com/mengxi-ream/read-frog/issues/754

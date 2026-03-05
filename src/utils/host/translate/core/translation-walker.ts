@@ -5,6 +5,7 @@ import {
   PARAGRAPH_ATTRIBUTE,
   WALKED_ATTRIBUTE,
 } from "../../../constants/dom-labels"
+import { FORCE_INLINE_TRANSLATION_TAGS } from "../../../constants/dom-rules"
 import { isBlockTransNode, isHTMLElement, isTextNode, isTransNode } from "../../dom/filter"
 import { translateNodes } from "./translation-modes"
 
@@ -28,6 +29,23 @@ export async function translateWalkedElement(
 
     for (const child of element.childNodes) {
       if (isHTMLElement(child) && child.hasAttribute(BLOCK_ATTRIBUTE)) {
+        // Force-inline tags like <a>/<span> shouldn't split paragraphs
+        // unless they contain meaningful block-like descendants (e.g. <br> or block content with text).
+        if (FORCE_INLINE_TRANSLATION_TAGS.has(child.tagName)) {
+          const blockDescendants = child.querySelectorAll(`[${BLOCK_ATTRIBUTE}]`)
+          let hasMeaningfulBlockDescendant = false
+          for (const blockEl of blockDescendants) {
+            if (!isHTMLElement(blockEl))
+              continue
+            if (blockEl.tagName === "BR" || blockEl.textContent?.trim()) {
+              hasMeaningfulBlockDescendant = true
+              break
+            }
+          }
+          if (!hasMeaningfulBlockDescendant) {
+            continue
+          }
+        }
         hasBlockNodeChild = true
         break
       }
