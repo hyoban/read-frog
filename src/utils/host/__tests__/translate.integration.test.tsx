@@ -1001,6 +1001,7 @@ describe("translate", () => {
         expect(node.textContent).toBe(`${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}${MOCK_ORIGINAL_TEXT}`)
       })
       it("bilingual mode: should skip ruby annotations without splitting the paragraph", async () => {
+        // https://github.com/mengxi-ream/read-frog/pull/1055
         render(
           <p data-testid="test-node">
             {MOCK_ORIGINAL_TEXT}
