@@ -100,11 +100,6 @@ describe("isDontWalkIntoAndDontTranslateAsChildElement", () => {
     expect(isDontWalkIntoAndDontTranslateAsChildElement(element, DEFAULT_CONFIG)).toBe(true)
   })
 
-  it("should return true for RUBY tag", () => {
-    const element = document.createElement("ruby")
-    expect(isDontWalkIntoAndDontTranslateAsChildElement(element, DEFAULT_CONFIG)).toBe(true)
-  })
-
   it("should return false for regular elements", () => {
     const element = document.createElement("div")
     expect(isDontWalkIntoAndDontTranslateAsChildElement(element, DEFAULT_CONFIG)).toBe(false)

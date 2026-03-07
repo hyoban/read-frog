@@ -92,10 +92,10 @@ describe("extractTextContent", () => {
       expect(extractTextContent(div, DEFAULT_CONFIG)).toBe("Hello World")
     })
 
-    it("should exclude ruby text and annotations from extraction", () => {
+    it("should include ruby text and exclude rp/rt elements", () => {
       const div = document.createElement("div")
       div.innerHTML = "Before<ruby>大阪<rp>(</rp><rt>Osaka</rt><rp>)</rp></ruby>After"
-      expect(extractTextContent(div, DEFAULT_CONFIG)).toBe("BeforeAfter")
+      expect(extractTextContent(div, DEFAULT_CONFIG)).toBe("Before大阪After")
     })
   })
 
