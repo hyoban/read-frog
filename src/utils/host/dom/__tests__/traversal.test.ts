@@ -91,6 +91,12 @@ describe("extractTextContent", () => {
       div.innerHTML = "<span>Hello</span> <span>World</span>"
       expect(extractTextContent(div, DEFAULT_CONFIG)).toBe("Hello World")
     })
+
+    it("should exclude ruby text and annotations from extraction", () => {
+      const div = document.createElement("div")
+      div.innerHTML = "Before<ruby>大阪<rp>(</rp><rt>Osaka</rt><rp>)</rp></ruby>After"
+      expect(extractTextContent(div, DEFAULT_CONFIG)).toBe("BeforeAfter")
+    })
   })
 
   describe("visually hidden element exclusion", () => {
